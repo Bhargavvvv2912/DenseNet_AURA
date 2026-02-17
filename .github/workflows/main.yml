@@ -20,24 +20,6 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: 📝 0. Create Manual Baseline Manifest
-        run: |
-          # Since the repo has no metadata, we create the 2017 "Known Good" state
-          cat <<EOF > requirements.txt
-          keras==2.0.8
-          tensorflow==1.4.0
-          numpy==1.14.5
-          scipy==0.19.1
-          EOF
-          
-          # Create the "Attack" manifest (2026 unpinned)
-          cat <<EOF > primary_requirements.txt
-          keras
-          tensorflow
-          numpy
-          scipy
-          EOF
-
       - name: 🧪 1. Run Pip Baseline (2017 Stability)
         run: |
           python -m venv baseline_env
