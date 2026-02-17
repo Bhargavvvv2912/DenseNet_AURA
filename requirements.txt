@@ -1,4 +1,4 @@
 tensorflow==2.5.0
-keras==2.6.0
+keras==2.5.0    <-- Match this to the TF version
 numpy==1.19.5
 scipy==1.7.1
