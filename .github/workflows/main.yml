@@ -1,34 +1,31 @@
-name: AURA Final Boss - DenseNet (Repo 49)
+name: AURA Speed Run - UserAgents (Repo 41)
 
 on:
   workflow_dispatch:
 
 jobs:
-  resurrect-densenet:
+  modernize-useragents:
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-      - name: 📂 Checkout CVPR 2017 Legend
+      - name: 📂 Checkout Repository
         uses: actions/checkout@v4
-        with:
-          repository: 'liuzhuang13/DenseNet'
 
       - name: 🐍 Set up Python 3.9
         uses: actions/setup-python@v5
         with:
           python-version: '3.9'
 
-      - name: 🧪 1. Run Pip Baseline (2017 Stability)
+      - name: 🧪 1. Run Pip Baseline (The 2018 Stability Window)
         run: |
           python -m venv baseline_env
           ./baseline_env/bin/pip install --upgrade pip
           ./baseline_env/bin/pip install -r requirements.txt
-          # No 'pip install .' because it's not installable
           ./baseline_env/bin/python validation_densenet.py
 
-      - name: 💥 2. Run Pip Upgrade (2026 Framework Attack)
+      - name: 💥 2. Run Pip Upgrade (The 2026 API Attack)
         continue-on-error: true
         run: |
           python -m venv upgrade_env
@@ -36,22 +33,21 @@ jobs:
           ./upgrade_env/bin/pip install -r primary_requirements.txt
           ./upgrade_env/bin/python validation_densenet.py
 
-      - name: 🤖 3. Run AURA Agent (The Zero-Manifest Synthesis)
+      - name: 🤖 3. Run AURA Agent (The Zero-Manifest Resurrection)
         run: |
           python -m venv --system-site-packages aura_env
           ./aura_env/bin/pip install google-genai google-api-core pypi-simple packaging pip-tools
-          # We pass 'installable=false' to AURA here
-          ./aura_env/bin/python -u dependency_agent.py --installable false | tee aura_densenet_execution.log
+          ./aura_env/bin/python -u dependency_agent.py | tee aura_ua_execution.log
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      - name: 💾 Final Commit & Close ASE-2026 Dataset
+      - name: 💾 Final Commit & Close Dataset
         if: always()
         run: |
           git config --global user.name 'AURA Agent'
           git config --global user.email 'aura-agent@users.noreply.github.com'
-          git add requirements.txt aura_densenet_execution.log
+          git add requirements.txt aura_ua_execution.log
           if ! git diff --staged --quiet; then
-            git commit -m "🤖 [ASE-2026] REPO 49/35: Resurrected DenseNet (CVPR 2017) [skip ci]"
+            git commit -m "🤖 [ASE-2026] REPO 41/35: Modernized UserAgents [skip ci]"
             git push
           fi
