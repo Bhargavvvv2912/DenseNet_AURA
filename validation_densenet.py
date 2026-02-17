@@ -1,37 +1,38 @@
 import sys
 import os
 
-def test_best_paper_resurrection():
+# Suppress warnings to keep the ASE report clean
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+def test_densenet_functional_api():
     try:
-        # 1. THE NAMESPACE TRIPWIRE
-        # In 2017, DenseNet relied on these specific sub-modules.
-        # In 2026 (Keras 3.x), these throw an ImportError immediately.
+        # THE TRIPWIRE
+        # This exact import sequence is what kills 2017 code in 2026.
+        # Standalone 'keras' 3.x (2026) has removed 'generic_utils'.
         import keras
         from keras.models import Model
-        from keras.layers import Input, Conv2D, Dense, AveragePooling2D
-        import keras.utils.generic_utils as generic_utils 
+        from keras.layers import Input, Conv2D, Dense, concatenate
+        import keras.utils.generic_utils as generic_utils
         
-        # 2. THE FUNCTIONAL API TRIPWIRE
-        # Legacy Keras used 'merge' or 'concatenate' differently than Keras 3.
-        from keras.layers import concatenate
-        
-        # Mock a small DenseNet-style connection
+        # Verify the Functional API (DenseNet's core)
         input_shape = (32, 32, 3)
         img_input = Input(shape=input_shape)
         x = Conv2D(64, (3, 3), padding='same')(img_input)
         y = Conv2D(64, (3, 3), padding='same')(x)
+        
+        # DenseNet is famous for these concatenations
         z = concatenate([x, y])
         
-        print(f"✅ Validation Passed: CVPR 2017 Architecture initialized (Keras {keras.__version__})")
+        print(f"✅ Validation Passed: DenseNet architecture initialized (Keras {keras.__version__})")
         return True
         
     except (ImportError, AttributeError, ModuleNotFoundError) as e:
         # This will be the "Attack" result (Red)
-        print(f"❌ Validation Failed: Zero-Manifest Dependency Break. {e}")
+        print(f"❌ Validation Failed: Legacy Namespace Breach. {e}")
         sys.exit(1)
     except Exception as e:
         print(f"❌ Validation Failed: {type(e).__name__}: {e}")
         sys.exit(1)
 
 if __name__ == "__main__":
-    test_best_paper_resurrection()
+    test_densenet_functional_api()
